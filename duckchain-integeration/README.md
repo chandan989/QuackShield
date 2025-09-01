@@ -1,76 +1,59 @@
-# DuckChain Integration
+# 🦆🔗 DuckChain Integration Core
 
-This directory contains the complete DuckChain blockchain integration for the QuackNet Framework.
+This module is the warp conduit to DuckChain—the on-chain substrate for staking, appeals, and governance. Here, messages leave the ship and become immutable star maps on the ledger.
 
-## Overview
+## Directory Star Map
 
-The DuckChain integration provides blockchain functionality for the QuackNet multi-agent moderation framework, including wallet connection, appeal submission, transaction management, and on-chain voting capabilities.
+- hooks/
+  - React/TypeScript hooks that expose wallet state, staking flows, and transaction lifecycle (pending → confirmed → failed).
+- types/
+  - Types for addresses, token units, transaction receipts, and governance payloads.
+- utils/
+  - Chain RPC clients, ABI bindings, gas estimators, and formatting helpers.
 
-## Directory Structure
+## Functional Systems
 
+- Staking & Appeals
+  - Stake $DUCK to initiate an appeal
+  - Query appeal status, tally votes, and surface verdicts to UI
+
+- Wallet & Session
+  - Connect/disconnect wallet
+  - Handle chain switching and unsupported networks gracefully
+
+- Transactions
+  - Prepare, simulate, submit, and monitor TXs
+  - Exponential backoff with user-friendly toasts
+
+## Example Hyperlane (Pseudo)
+
+```ts
+const { connect, stakeForAppeal, getAppeal } = useDuckChain();
+await connect();
+const tx = await stakeForAppeal({ messageId, amount: toDUCK(50) });
+await tx.wait();
+const appeal = await getAppeal(messageId);
+renderAppeal(appeal);
 ```
-duckchain-integeration/
-├── README.md                 # This documentation file
-├── types/
-│   └── blockchain.ts         # TypeScript types for blockchain operations
-├── utils/
-│   └── duckchain.ts         # Core DuckChain service implementation
-└── hooks/
-    └── useDuckChain.ts      # React hook for DuckChain integration
-```
-
-## Files Description
-
-### types/blockchain.ts
-Contains all TypeScript type definitions for the DuckChain integration:
-- `DuckChainConnection` - Connection state and wallet info
-- `AppealTransaction` - Appeal submission and voting data
-- `Transaction` - Generic blockchain transaction structure
-- `DuckChainError` - Custom error handling for blockchain operations
-- Various enums for connection status, transaction status, and appeal status
-
-### utils/duckchain.ts
-Core service implementation providing:
-- Wallet connection and disconnection
-- Appeal submission with staking mechanism
-- Transaction management and confirmation
-- Mock DuckChain testnet simulation
-- Event listeners for connection state changes
-- Utility functions for balance formatting and address validation
-
-### hooks/useDuckChain.ts
-React hook that provides:
-- Connection state management
-- Wallet information (address, balance)
-- Appeal submission functionality
-- Error handling and state updates
-- Formatted display values for UI components
-
-## Key Features
-
-1. **Wallet Integration**: Connect/disconnect wallet functionality with balance tracking
-2. **Appeal System**: Submit moderation appeals with $DUCK token staking
-3. **Transaction Management**: Track appeal transactions and their status
-4. **Mock Blockchain**: Simulated DuckChain testnet for development and testing
-5. **Error Handling**: Comprehensive error types and user-friendly error messages
-6. **React Integration**: Easy-to-use React hook for frontend components
-
-## Usage in QuackNet Framework
-
-This integration is currently used in the main QuackNet application (`quack-shield-app`) to provide:
-- On-chain appeal submission for moderation decisions
-- Wallet connection status in the UI header
-- Appeal modal with blockchain interaction
-- Real-time balance and address display
 
 ## Configuration
 
-The integration uses a mock DuckChain testnet configuration:
-- Chain ID: 6969
-- Staking Amount: 50 $DUCK tokens
-- Voting Period: 24 hours
-- Mock RPC URL and contract address
+- Environment
+  - DUCKCHAIN_RPC_URL
+  - DUCKCHAIN_CONTRACT_MODERATION
+  - DUCKCHAIN_CHAIN_ID
+- Security
+  - Never store private keys; rely on wallet providers
+  - Validate chain ID before sending transactions
 
-## Development Notes
+## Failure Modes
 
-This is a demonstration implementation using simulated blockchain interactions. In production, this would connect to actual DuckChain network infrastructure and real smart contracts.
+- RPC timeouts → auto-retry and suggest alternative endpoints
+- Nonce conflicts → resync account state
+- Reorgs → re-validate finality before closing UI flows
+
+## When To Use
+
+- Any on-chain action: staking, voting, resolving appeals, querying governance
+
+> Status: Critical systems. Without this core, appeals remain in simulation.
