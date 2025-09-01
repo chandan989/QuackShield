@@ -1,7 +1,8 @@
 // Shared TypeScript models for QuackNet MVP
 
+import type { AppealStatus } from './blockchain'
+
 export type MessageStatus = 'normal' | 'flagged_by_moderator' | 'verified_by_verifier'
-export type AppealStatus = 'none' | 'pending'
 
 export interface Message {
   id: string

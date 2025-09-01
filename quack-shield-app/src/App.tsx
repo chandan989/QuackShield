@@ -5,6 +5,7 @@ import Modal from './components/Modal'
 import type { AgentsConfig, RulesConfig, Message } from './types/models'
 import { initialMessages, liveTexts } from './data/mockData'
 import { moderatorCheck } from './utils/agents'
+import { useDuckChain } from './hooks/useDuckChain'
 
 function App() {
   const [agents, setAgents] = useState<AgentsConfig>({
@@ -19,6 +20,18 @@ function App() {
 
   const [isAppealModalOpen, setAppealModalOpen] = useState(false)
   const [selectedMessageId, setSelectedMessageId] = useState<string | undefined>(undefined)
+  
+  // DuckChain integration
+  const { 
+    isConnected, 
+    isConnecting, 
+    formattedBalance, 
+    formattedAddress,
+    connect, 
+    disconnect,
+    submitAppeal,
+    error: duckChainError 
+  } = useDuckChain()
 
   const intervalRef = useRef<number | null>(null)
   const timeoutsRef = useRef<number[]>([])
@@ -42,12 +55,23 @@ function App() {
     setSelectedMessageId(undefined)
   }
 
-  const confirmAppeal = () => {
+  const confirmAppeal = async () => {
     if (!selectedMessageId) return
-    setMessages((prev) =>
-      prev.map((m) => (m.id === selectedMessageId ? { ...m, appealStatus: 'pending' } : m))
-    )
-    closeAppeal()
+    
+    try {
+      // Submit appeal to blockchain
+      await submitAppeal(selectedMessageId, 'User appeal for content moderation decision')
+      
+      // Update message status to submitted (blockchain will handle status progression)
+      setMessages((prev) =>
+        prev.map((m) => (m.id === selectedMessageId ? { ...m, appealStatus: 'submitted' } : m))
+      )
+      
+      closeAppeal()
+    } catch (error) {
+      console.error('Failed to submit appeal:', error)
+      // Keep modal open to show error to user
+    }
   }
 
   // Live feed generator + agent orchestration (Wizard-of-Oz)
@@ -113,9 +137,25 @@ function App() {
         <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-slate-900">QuackNet Framework</h1>
           <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-700 px-3 py-1 text-sm border border-emerald-200">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-              Connected to DuckChain Testnet
+            {/* DuckChain Connection Status */}
+            <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm border cursor-pointer transition-colors ${
+              isConnected 
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                : isConnecting
+                ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+            }`}
+            onClick={isConnected ? disconnect : connect}
+            title={isConnected ? `Click to disconnect • ${formattedAddress} • ${formattedBalance}` : 'Click to connect wallet'}
+            >
+              <span className={`h-2 w-2 rounded-full inline-block ${
+                isConnected 
+                  ? 'bg-emerald-500' 
+                  : isConnecting 
+                  ? 'bg-yellow-500 animate-pulse' 
+                  : 'bg-slate-400'
+              }`} />
+              {isConnecting ? 'Connecting...' : isConnected ? `Connected • ${formattedAddress}` : 'Connect to DuckChain'}
             </div>
             <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium ${agents.moderatorEnabled ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-100 text-slate-500 border-slate-300'}`}>🛡️ Moderator</span>
             <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium ${agents.verifierEnabled ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-slate-100 text-slate-500 border-slate-300'}`}>🔎 Verifier</span>
@@ -141,14 +181,43 @@ function App() {
       </main>
 
       <Modal
-        title="Appeal Decision"
+        title="Appeal Decision On-Chain"
         open={isAppealModalOpen}
         onClose={closeAppeal}
         onConfirm={confirmAppeal}
-        confirmText="Confirm"
+        confirmText={isConnected ? "Submit Appeal" : "Connect Wallet First"}
         cancelText="Cancel"
       >
-        Appeal this decision on-chain? This will require a stake of 50 $DUCK.
+        <div className="space-y-3">
+          <p>Appeal this moderation decision on DuckChain? This will require staking 50 $DUCK.</p>
+          
+          {isConnected ? (
+            <div className="bg-slate-50 rounded-lg p-3 text-sm">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-slate-600">Your Balance:</span>
+                <span className="font-medium">{formattedBalance}</span>
+              </div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-slate-600">Required Stake:</span>
+                <span className="font-medium">50 $DUCK</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600">Wallet:</span>
+                <span className="font-mono text-xs">{formattedAddress}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+              Please connect your DuckChain wallet to submit an appeal.
+            </div>
+          )}
+          
+          {duckChainError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+              <strong>Error:</strong> {duckChainError.message}
+            </div>
+          )}
+        </div>
       </Modal>
     </div>
   )
