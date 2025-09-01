@@ -219,3 +219,10 @@ QuackGuard demonstrates the potential of multi-agent moderation frameworks throu
     END DEMO // QUACKGUARD MVP READY FOR TESTING
     ⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡
 ```
+
+---
+
+## 🧾 DATs + LazAI/Alith Integration Plan
+
+- Integration Plan: [DAT_INTEGRATION_PLAN.md](./DAT_INTEGRATION_PLAN.md)
+- Resources: [LazAI Quick Start — Data Contribution Workflow](https://docs.lazai.network/quick-start-docs/data-contribution-workflow/introduction)

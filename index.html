@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuackGuard - Multi-Agent Moderation Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-color: #91E761;
+            --brand-color-rgb: 145, 231, 97;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+            background-image:
+                    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .glow-text {
+            color: var(--brand-color);
+            text-shadow: 0 0 8px rgba(var(--brand-color-rgb), 0.6), 0 0 20px rgba(var(--brand-color-rgb), 0.4);
+        }
+        .card {
+            background-color: rgba(23, 23, 23, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            border-color: rgba(var(--brand-color-rgb), 0.5);
+            transform: translateY(-4px);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .ascii-art {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--brand-color);
+            text-shadow: 0 0 5px rgba(var(--brand-color-rgb), 0.5);
+            line-height: 1.2;
+            white-space: pre;
+            text-align: center;
+        }
+        .text-brand { color: var(--brand-color); }
+        .bg-brand { background-color: var(--brand-color); }
+        .hover\:bg-brand-light:hover { background-color: #9cf06b; }
+        .hover\:text-brand:hover { color: var(--brand-color); }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm border-b border-gray-800">
+    <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3 text-2xl font-bold tracking-tighter text-white">
+            <img src="QuackShield.png" alt="QuackGuard Logo" class="h-8 w-8 rounded">
+            <span>QuackGuard</span>
+        </a>
+        <nav class="hidden md:flex items-center space-x-8">
+            <a href="#architecture" class="text-gray-300 hover:text-brand transition-colors">Architecture</a>
+            <a href="#features" class="text-gray-300 hover:text-brand transition-colors">Features</a>
+            <a href="#agents" class="text-gray-300 hover:text-brand transition-colors">Agents</a>
+            <a href="#roadmap" class="text-gray-300 hover:text-brand transition-colors">Roadmap</a>
+        </nav>
+        <a href="#" class="hidden md:inline-block bg-brand text-black font-bold py-2 px-4 rounded-lg hover:bg-brand-light transition-transform hover:scale-105">
+            Launch Demo
+        </a>
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+        <a href="#architecture" class="block py-2 text-gray-300 hover:text-brand">Architecture</a>
+        <a href="#features" class="block py-2 text-gray-300 hover:text-brand">Features</a>
+        <a href="#agents" class="block py-2 text-gray-300 hover:text-brand">Agents</a>
+        <a href="#roadmap" class="block py-2 text-gray-300 hover:text-brand">Roadmap</a>
+        <a href="#" class="block mt-2 bg-brand text-black font-bold py-2 px-4 rounded-lg text-center">Launch Demo</a>
+    </div>
+</header>
+
+<main class="pt-24">
+    <!-- Hero Section -->
+    <section class="py-20 md:py-32 text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-black text-white leading-tight">
+                The Future of <span class="glow-text">Decentralized</span> Moderation
+            </h1>
+            <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                QuackGuard is an MVP demonstrating a multi-agent framework for unstoppable, transparent, and democratically governed content moderation in digital communities.
+            </p>
+            <div class="mt-10 flex justify-center items-center gap-4">
+                <a href="#" class="bg-brand text-black font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-light transition-transform hover:scale-105">
+                    Launch MVP Demo
+                </a>
+                <a href="https://github.com/chandan989/QuackShield" class="border border-gray-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-800 transition-colors">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Architecture Section -->
+    <section id="architecture" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white">Collaborative Agent Workflow</h2>
+                <p class="mt-4 text-gray-400 max-w-2xl mx-auto">See how agents work in sequence to identify, verify, and handle content based on configurable rules.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 fade-in">
+                <!-- Moderator Card -->
+                <div class="card p-6 rounded-lg w-full md:w-1/4 text-center">
+                    <div class="text-4xl">🔍</div>
+                    <h3 class="text-xl font-bold mt-2 text-white">Moderator Agent</h3>
+                    <p class="text-gray-400 mt-2 text-sm">Real-time threat scanning and initial flagging based on heuristic pattern recognition.</p>
+                    <span class="mt-4 inline-block font-mono text-xs text-brand">&lt;100ms Response</span>
+                </div>
+
+                <div class="text-2xl text-gray-600 mx-4 my-2 md:my-0">▶</div>
+
+                <!-- Verifier Card -->
+                <div class="card p-6 rounded-lg w-full md:w-1/4 text-center">
+                    <div class="text-4xl">✅</div>
+                    <h3 class="text-xl font-bold mt-2 text-white">Verifier Agent</h3>
+                    <p class="text-gray-400 mt-2 text-sm">Secondary confirmation and action execution, authorized to remove flagged content.</p>
+                    <span class="mt-4 inline-block font-mono text-xs text-brand">2-3s Verification</span>
+                </div>
+
+                <div class="text-2xl text-gray-600 mx-4 my-2 md:my-0">▶</div>
+
+                <!-- DAO Appeal Card -->
+                <div class="card p-6 rounded-lg w-full md:w-1/4 text-center">
+                    <div class="text-4xl">🏛️</div>
+                    <h3 class="text-xl font-bold mt-2 text-white">DAO Appeal Protocol</h3>
+                    <p class="text-gray-400 mt-2 text-sm">Decentralized governance layer for arbitration via token staking and community voting.</p>
+                    <span class="mt-4 inline-block font-mono text-xs text-brand">On-Chain Governance</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-black/30">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white">Interactive Protocol</h2>
+                <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Configure your agent swarm, monitor their actions, and participate in decentralized governance—all in real-time.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1: Control Panel -->
+                <div class="card p-8 rounded-xl fade-in">
+                    <div class="text-3xl">🔧</div>
+                    <h3 class="text-2xl font-bold mt-4 text-white">Control Panel</h3>
+                    <p class="mt-2 text-gray-400">Precisely configure your agent swarm. Toggle units on or off, and customize rules for malicious links, toxicity, and spam.</p>
+                </div>
+
+                <!-- Feature 2: Message Stream -->
+                <div class="card p-8 rounded-xl fade-in" style="transition-delay: 200ms;">
+                    <div class="text-3xl">💬</div>
+                    <h3 class="text-2xl font-bold mt-4 text-white">Live Message Stream</h3>
+                    <p class="mt-2 text-gray-400">Watch the agents work live as messages transition through moderation states.</p>
+                    <div class="mt-4 space-y-2 font-mono text-sm">
+                        <p class="text-gray-300">⚪ Normal: Standard message flow</p>
+                        <p class="text-brand">⚠️ Flagged: Moderator has an issue</p>
+                        <p class="text-red-500">❌ Verified: Content removed</p>
+                        <p class="text-blue-500">📊 Appeal: DAO arbitration pending</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Appeal Interface -->
+                <div class="card p-8 rounded-xl fade-in" style="transition-delay: 400ms;">
+                    <div class="text-3xl">🏛️</div>
+                    <h3 class="text-2xl font-bold mt-4 text-white">Appeal Interface</h3>
+                    <p class="mt-2 text-gray-400">Challenge agent decisions through a transparent, community-driven process by staking tokens to initiate a vote.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agent Specifications Section -->
+    <section id="agents" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white">Agent Specifications</h2>
+                <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Meet the core units of the QuackGuard framework.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Moderator Agent Spec -->
+                <div class="card p-6 rounded-lg fade-in">
+                    <h3 class="text-2xl font-bold text-brand">🔍 Moderator Agent</h3>
+                    <ul class="mt-4 space-y-2 font-mono text-sm text-gray-300">
+                        <li><span class="font-bold text-white">Classification:</span> Tier-1 Detection</li>
+                        <li><span class="font-bold text-white">Directive:</span> Real-time scanning</li>
+                        <li><span class="font-bold text-white">Response Time:</span> &lt;100ms</li>
+                        <li><span class="font-bold text-white">Precision Mode:</span> Heuristic Algorithms</li>
+                    </ul>
+                </div>
+                <!-- Verifier Agent Spec -->
+                <div class="card p-6 rounded-lg fade-in" style="transition-delay: 200ms;">
+                    <h3 class="text-2xl font-bold text-brand">✅ Verifier Agent</h3>
+                    <ul class="mt-4 space-y-2 font-mono text-sm text-gray-300">
+                        <li><span class="font-bold text-white">Classification:</span> Tier-2 Validation</li>
+                        <li><span class="font-bold text-white">Directive:</span> Secondary confirmation</li>
+                        <li><span class="font-bold text-white">Response Time:</span> 2-3s delay</li>
+                        <li><span class="font-bold text-white">Authority Level:</span> Removal Authorization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-white">Future Enhancements</h2>
+                <p class="mt-4 text-gray-400 max-w-2xl mx-auto">The MVP is just the beginning. QuackGuard is designed as a foundation for a more intelligent and interconnected future.</p>
+            </div>
+            <div class="max-w-3xl mx-auto grid sm:grid-cols-2 gap-8 fade-in">
+                <div class="flex items-start space-x-4">
+                    <div class="text-2xl pt-1">🧠</div>
+                    <div>
+                        <h4 class="font-bold text-white">Neural Network Integration</h4>
+                        <p class="text-gray-400">Incorporate advanced ML models for more nuanced content understanding.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="text-2xl pt-1">🔗</div>
+                    <div>
+                        <h4 class="font-bold text-white">Cross-Chain Compatibility</h4>
+                        <p class="text-gray-400">Deploy agents across multiple blockchains for wider ecosystem support.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="text-2xl pt-1">🤝</div>
+                    <div>
+                        <h4 class="font-bold text-white">Agent Marketplace</h4>
+                        <p class="text-gray-400">Allow third-party developers to create and offer specialized moderation agents.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="text-2xl pt-1">🌍</div>
+                    <div>
+                        <h4 class="font-bold text-white">Real Blockchain Integration</h4>
+                        <p class="text-gray-400">Move from a simulated environment to live on-chain governance and appeals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <div class="ascii-art mb-8 fade-in">
+                ⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡
+                END DEMO // QUACKGUARD MVP READY FOR TESTING
+                ⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡
+            </div>
+            <p class="font-bold text-lg text-gray-300">QuackGuard MVP</p>
+            <p class="mt-2 text-sm">Built with passion for the future of decentralized moderation.</p>
+            <p class="mt-1 text-xs">This is an MVP prototype with simulated blockchain interactions for demonstration purposes.</p>
+            <div class="mt-6 flex justify-center space-x-6">
+                <a href="https://github.com/chandan989/QuackShield" class="hover:text-brand">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<script>
+    // Simple Intersection Observer for fade-in animations
+    const faders = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optional: unobserve after animation
+                // observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    faders.forEach(fader => {
+        observer.observe(fader);
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+
+</body>
+</html>
+
+
