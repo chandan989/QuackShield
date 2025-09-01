@@ -6,7 +6,7 @@ import type { AgentsConfig, RulesConfig, Message } from './types/models'
 import { initialMessages, liveTexts } from './data/mockData'
 import { moderatorCheck } from './utils/agents'
 import { useDuckChain } from './hooks/useDuckChain'
-import { useContentModerator } from '../../chaingpt-integration/hooks/useChainGPT'
+import { useContentModerator } from './integration/useChainGPTProxy'
 
 function App() {
   const [agents, setAgents] = useState<AgentsConfig>({
@@ -227,7 +227,7 @@ function App() {
                 ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
                 : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
             }`}
-            onClick={isConnected ? disconnect : connect}
+            onClick={() => { (isConnected ? disconnect : connect)(); }}
             title={isConnected ? `Click to disconnect • ${formattedAddress} • ${formattedBalance}` : 'Click to connect wallet'}
             >
               <span className={`h-2 w-2 rounded-full inline-block ${
@@ -248,7 +248,7 @@ function App() {
                 ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
                 : 'bg-slate-100 text-slate-500 border-slate-300 hover:bg-slate-200'
             }`}
-            onClick={aiConnected ? disconnectAI : connectAI}
+            onClick={() => { (aiConnected ? disconnectAI : connectAI)(); }}
             title={`ChainGPT AI: ${aiConnected ? 'Connected' : aiConnecting ? 'Connecting...' : 'Disconnected'} • Active analyses: ${activeAnalyses.size} • Total analyzed: ${usageStats.totalRequests}`}
             >
               🤖 AI {aiConnected ? `(${activeAnalyses.size})` : aiConnecting ? '...' : '❌'}

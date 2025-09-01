@@ -106,6 +106,8 @@ npm run build
 
 ## 🎮 Interface Protocol
 
+See also: DEMO_SCRIPT.md for a 4‑minute speaking script.
+
 ### 🔧 Control Panel
 Configure your agent swarm with precision controls:
 - **Agent Activation Switches:** Toggle Moderator/Verifier units

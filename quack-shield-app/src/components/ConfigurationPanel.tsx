@@ -1,6 +1,6 @@
 import React from 'react'
 import type { AgentsConfig, RulesConfig } from '../types/models'
-import type { AIUsageStats, ChainGPTError } from '../../../chaingpt-integration/types/ai'
+import type { AIUsageStats, ChainGPTError } from '../types/ai'
 
 interface Props {
   agents: AgentsConfig
