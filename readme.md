@@ -1,22 +1,24 @@
-# 🦆⚡ QuackNet Framework
+# 🦆⚡ QuackGuard
 
 ```
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-    ░   ██████╗ ██╗   ██╗ █████╗  ██████╗██╗  ██╗███╗   ██╗███████╗████████╗ ░
-    ░  ██╔═══██╗██║   ██║██╔══██╗██╔════╝██║ ██╔╝████╗  ██║██╔════╝╚══██╔══╝ ░
-    ░  ██║   ██║██║   ██║███████║██║     █████╔╝ ██╔██╗ ██║█████╗     ██║    ░
-    ░  ██║▄▄ ██║██║   ██║██╔══██║██║     ██╔═██╗ ██║╚██╗██║██╔══╝     ██║    ░
-    ░  ╚██████╔╝╚██████╔╝██║  ██║╚██████╗██║  ██╗██║ ╚████║███████╗   ██║    ░
-    ░   ╚══▀▀═╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝    ░
-    ░                                                                          ░
-    ░              🌐 Autonomous Agent Orchestration for DuckChain             ░
-    ░                          ⚡ Multi-Agent Moderation Protocol ⚡            ░
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+  ╔════════════════════════════════════════════════════════════════════════╗
+  ║   ██████╗ ██╗   ██╗ █████╗  ██████╗██╗  ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗  ║
+  ║  ██╔═══██╗██║   ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗ ║
+  ║  ██║   ██║██║   ██║███████║██║     █████╔╝ ██║  ███╗██║   ██║███████║██████╔╝██║  ██║ ║
+  ║  ██║▄▄ ██║██║   ██║██╔══██║██║     ██╔═██╗ ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║ ║
+  ║  ╚██████╔╝╚██████╔╝██║  ██║╚██████╗██║  ██╗╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ ║
+  ║   ╚══▀▀═╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ║
+  ║                                                                                        ║
+  ║                    🌐 Multi-Agent Moderation Framework MVP                            ║
+  ║                           ⚡ React + TypeScript Demo ⚡                               ║
+  ╚════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-## 🚀 Mission Protocol
+## 🚀 Project Overview
 
-QuackNet is a **next-generation autonomous agent orchestration framework** designed for the decentralized future. Operating on the bleeding edge of Web3 infrastructure, QuackNet demonstrates how intelligent agents can collaborate in trustless environments to maintain digital community standards while preserving user sovereignty.
+QuackGuard is an **MVP prototype demonstrating a multi-agent moderation framework** built with React and TypeScript. This interactive demo showcases how intelligent agents can collaborate in sequence to maintain digital community standards through configurable rules and transparent decision-making.
+
+**🎯 MVP Goal:** Demonstrate agent collaboration through a simulated chat environment with Moderator Agent and Verifier Agent working in sequence.
 
 **🎯 Core Directive:** Build unstoppable, transparent, and democratically governed content moderation through agent swarms.
 
@@ -60,35 +62,43 @@ QuackNet is a **next-generation autonomous agent orchestration framework** desig
 
 ---
 
-## 🛠️ Deploy Sequence
+## 🛠️ Technical Stack & Setup
+
+### Tech Stack
+- **Frontend:** React 19.1.1 + TypeScript 5.8.3 via Vite 7.1.2
+- **Styling:** TailwindCSS 4.1.12 + PostCSS + Autoprefixer  
+- **State Management:** React hooks (useState, useEffect, useCallback)
+- **Blockchain Integration:** Custom DuckChain hooks and utilities
+- **Type Safety:** Full TypeScript with interfaces for all models
+- **Linting:** ESLint 9.33.0 + TypeScript ESLint
 
 ### Prerequisites
 - Node.js v18+
-- Neural implant... just kidding, any modern browser 🧠
-- Basic knowledge of the metaverse
+- Modern web browser
+- Basic knowledge of React/TypeScript
 
-### Initialize
+### Installation & Setup
 ```bash
-# Clone the framework
+# Clone the repository
 git clone <repository-url>
-cd quacknet-app
+cd quack-shield-app
 
-# Install agent dependencies
+# Install dependencies
 npm install
 
-# Activate development matrix
+# Start development server
 npm run dev
 ```
 
-### Agent Activation
+### Development Commands
 ```bash
-# Launch QuackNet Terminal
+# Launch QuackGuard Demo
 http://localhost:5173
 
-# Monitor agent logs
+# Run tests
 npm run test
 
-# Compile for deployment
+# Build for production
 npm run build
 ```
 
@@ -135,66 +145,77 @@ npm run test:integration
 
 ---
 
-## 🌐 Network Status
+## 🌐 MVP Status
 
 ```
-🟢 DuckChain Testnet: OPERATIONAL
-⚡ Agent Swarm: 2/2 ACTIVE
+🟡 DuckChain Testnet: SIMULATED
+⚡ Agent Swarm: 2/2 DEMO ACTIVE (Moderator + Verifier)
 📡 DAO Governance: SIMULATED
-🛡️ Security Level: MAXIMUM
+🛡️ Security Level: PROTOTYPE
 ```
+
+**Note:** This is an MVP prototype with simulated blockchain interactions for demonstration purposes.
 
 ---
 
-## 🔮 Future Protocols
+## 🔮 Future Enhancements
 
-The QuackNet Framework is designed for infinite scalability:
+QuackGuard MVP is designed as a foundation for future expansion:
 
 - **🧠 Neural Networks:** Integration with advanced ML moderation models
-- **🔗 Cross-Chain Compatibility:** Multi-blockchain agent deployment
+- **🔗 Cross-Chain Compatibility:** Multi-blockchain agent deployment  
 - **🤝 Agent Marketplace:** Pluggable third-party agent extensions
-- **🌍 Metaverse Integration:** Virtual world content governance
-- **⚖️ Legal Oracle Integration:** Real-world regulatory compliance agents
+- **🌍 Real Blockchain Integration:** Actual on-chain governance and appeals
+- **⚖️ Advanced Rules Engine:** More sophisticated content detection algorithms
 
 ---
 
-## 🛸 Contributing to the Collective
+## 🛸 Contributing
 
-QuackNet thrives on community innovation. Join the resistance against centralized moderation:
+QuackGuard welcomes community contributions to improve the multi-agent framework:
 
-1. Fork the framework repository
-2. Deploy your agent modifications
-3. Submit enhancement proposals via DAO governance
-4. Earn $DUCK tokens for valuable contributions
-
----
-
-## 📡 Transmission Logs
-
-**Framework Version:** MVP-2025.09.01  
-**Agent Compatibility:** Universal  
-**Blockchain Network:** DuckChain Testnet  
-**Governance Status:** Decentralized
+1. Fork the repository
+2. Create feature branches for new agent types or UI improvements
+3. Submit pull requests with clear documentation
+4. Follow TypeScript and React best practices
+5. Add tests for new functionality
 
 ---
 
-## 🛡️ Security Clearance
+## 📡 Project Information
 
-This framework operates under **Zero-Trust Protocol**:
-- No persistent data storage outside session memory
-- Simulated blockchain interactions for safe testing
-- Agent logic fully auditable and transparent
-- Community governance prevents centralized control
+**Project:** QuackGuard MVP  
+**Version:** MVP-2025.09.01  
+**Tech Stack:** React 19.1.1 + TypeScript 5.8.3 + Vite 7.1.2 + TailwindCSS 4.1.12  
+**Agent Types:** Moderator Agent + Verifier Agent  
+**Blockchain:** DuckChain Integration with Wallet Support  
+**Components:** ConfigurationPanel, ChatFeed, ChatMessage, Modal, DuckChain Hooks  
+**Status:** Interactive Demo with Full Implementation
 
 ---
 
-*Built with 🦆 by the QuackNet Collective*  
-*"Autonomous. Transparent. Unstoppable."*
+## 🛡️ Security & Limitations
+
+This MVP prototype operates with the following characteristics:
+- **Simulated Environment:** All blockchain interactions are mocked for demonstration
+- **In-Memory State:** No persistent data storage, resets on page refresh
+- **Agent Logic:** "Wizard of Oz" approach with predefined rules and delays
+- **Educational Purpose:** Designed to demonstrate multi-agent collaboration concepts
+- **Open Source:** All code is transparent and auditable
+
+---
+
+## 🎯 About This MVP
+
+QuackGuard demonstrates the potential of multi-agent moderation frameworks through an interactive prototype. Built as part of a bounty submission, this MVP showcases agent collaboration, configurable rules, and democratic governance concepts in a simulated Web3 environment.
+
+*Built with 🦆 for the future of decentralized moderation*  
+*"Demonstrating Multi-Agent Collaboration"*
 
 ---
 
 ```
     ⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡
-    END TRANSMISSION // FRAMEWORK READY FOR DEPLOYMENT
+    END DEMO // QUACKGUARD MVP READY FOR TESTING
     ⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡🦆⚡
 ```
