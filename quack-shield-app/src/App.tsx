@@ -6,6 +6,7 @@ import type { AgentsConfig, RulesConfig, Message } from './types/models'
 import { initialMessages, liveTexts } from './data/mockData'
 import { moderatorCheck } from './utils/agents'
 import { useDuckChain } from './hooks/useDuckChain'
+import { useContentModerator } from '../../chaingpt-integration/hooks/useChainGPT'
 
 function App() {
   const [agents, setAgents] = useState<AgentsConfig>({
@@ -33,9 +34,28 @@ function App() {
     error: duckChainError 
   } = useDuckChain()
 
+  // ChainGPT AI integration
+  const { 
+    isConnected: aiConnected,
+    isConnecting: aiConnecting,
+    connect: connectAI,
+    disconnect: disconnectAI,
+    moderateMessage,
+    activeAnalyses,
+    usageStats,
+    error: aiError
+  } = useContentModerator()
+
   const intervalRef = useRef<number | null>(null)
   const timeoutsRef = useRef<number[]>([])
   const nextIdRef = useRef<number>(100)
+
+  // Auto-connect to ChainGPT AI service on mount
+  useEffect(() => {
+    if (!aiConnected && !aiConnecting) {
+      connectAI()
+    }
+  }, [aiConnected, aiConnecting, connectAI])
 
   const onToggleAgent = (key: keyof AgentsConfig) => {
     setAgents((prev) => ({ ...prev, [key]: !prev[key] }))
@@ -98,15 +118,77 @@ function App() {
       let newMsg: Message = { ...(base as any), status: 'normal' }
 
       if (agents.moderatorEnabled) {
-        const { shouldFlag, reason } = moderatorCheck(newMsg, rules)
-        if (shouldFlag) {
-          newMsg = { ...newMsg, status: 'flagged_by_moderator', reason }
+        // Try AI-enhanced moderation first, fallback to rule-based
+        if (aiConnected) {
+          try {
+            // Use AI moderation asynchronously
+            moderateMessage(newMsg.id, newMsg.text).then(result => {
+              if (result.shouldFlag) {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === newMsg.id && m.status === 'normal'
+                      ? { 
+                          ...m, 
+                          status: 'flagged_by_moderator', 
+                          reason: result.analysis.reasoning || 'AI detected policy violation',
+                          aiConfidence: result.confidence,
+                          aiRiskLevel: result.riskLevel,
+                          aiAnalysis: result.analysis
+                        }
+                      : m
+                  )
+                )
+
+                // Trigger verifier agent if enabled
+                if (agents.verifierEnabled) {
+                  const delay = 1500 + Math.floor(Math.random() * 1500)
+                  const timeoutId = window.setTimeout(() => {
+                    setMessages((prev) =>
+                      prev.map((m) =>
+                        m.id === newMsg.id && m.status === 'flagged_by_moderator'
+                          ? { ...m, status: 'verified_by_verifier', removed: true }
+                          : m
+                      )
+                    )
+                  }, delay)
+                  timeoutsRef.current.push(timeoutId)
+                }
+              }
+            }).catch((error) => {
+              console.warn('AI moderation failed, falling back to rules:', error)
+              // Fallback to rule-based moderation
+              const { shouldFlag, reason } = moderatorCheck(newMsg, rules)
+              if (shouldFlag) {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === newMsg.id && m.status === 'normal'
+                      ? { ...m, status: 'flagged_by_moderator', reason }
+                      : m
+                  )
+                )
+              }
+            })
+          } catch (error) {
+            console.warn('AI moderation error, using rule-based:', error)
+            // Immediate fallback to rule-based moderation
+            const { shouldFlag, reason } = moderatorCheck(newMsg, rules)
+            if (shouldFlag) {
+              newMsg = { ...newMsg, status: 'flagged_by_moderator', reason }
+            }
+          }
+        } else {
+          // Use rule-based moderation when AI is not available
+          const { shouldFlag, reason } = moderatorCheck(newMsg, rules)
+          if (shouldFlag) {
+            newMsg = { ...newMsg, status: 'flagged_by_moderator', reason }
+          }
         }
       }
 
       setMessages((prev) => [...prev, newMsg])
 
-      if (newMsg.status === 'flagged_by_moderator' && agents.verifierEnabled) {
+      // Handle rule-based verifier for non-AI flagged messages
+      if (newMsg.status === 'flagged_by_moderator' && agents.verifierEnabled && !aiConnected) {
         const delay = 1500 + Math.floor(Math.random() * 1500)
         const timeoutId = window.setTimeout(() => {
           setMessages((prev) =>
@@ -157,6 +239,21 @@ function App() {
               }`} />
               {isConnecting ? 'Connecting...' : isConnected ? `Connected • ${formattedAddress}` : 'Connect to DuckChain'}
             </div>
+            
+            {/* ChainGPT AI Status */}
+            <div className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium cursor-pointer transition-colors ${
+              aiConnected 
+                ? 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200'
+                : aiConnecting
+                ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                : 'bg-slate-100 text-slate-500 border-slate-300 hover:bg-slate-200'
+            }`}
+            onClick={aiConnected ? disconnectAI : connectAI}
+            title={`ChainGPT AI: ${aiConnected ? 'Connected' : aiConnecting ? 'Connecting...' : 'Disconnected'} • Active analyses: ${activeAnalyses.size} • Total analyzed: ${usageStats.totalRequests}`}
+            >
+              🤖 AI {aiConnected ? `(${activeAnalyses.size})` : aiConnecting ? '...' : '❌'}
+            </div>
+            
             <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium ${agents.moderatorEnabled ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-100 text-slate-500 border-slate-300'}`}>🛡️ Moderator</span>
             <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium ${agents.verifierEnabled ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-slate-100 text-slate-500 border-slate-300'}`}>🔎 Verifier</span>
           </div>
@@ -170,6 +267,13 @@ function App() {
             rules={rules}
             onToggleAgent={onToggleAgent}
             onToggleRule={onToggleRule}
+            aiConnected={aiConnected}
+            aiConnecting={aiConnecting}
+            activeAnalyses={activeAnalyses}
+            usageStats={usageStats}
+            aiError={aiError}
+            onConnectAI={connectAI}
+            onDisconnectAI={disconnectAI}
           />
         </div>
         <div className="md:col-span-2 rounded-lg border bg-white shadow-sm">

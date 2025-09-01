@@ -9,10 +9,10 @@ import type {
   ModerationRecommendation,
   AIUsageStats,
   AIAgentCapabilities,
-  ChainGPTError,
   AIAnalysisEvent,
   AIConnectionEvent
 } from '../types/ai'
+import { ChainGPTError } from '../types/ai'
 
 export interface UseChainGPTReturn {
   // Connection state
@@ -63,7 +63,7 @@ export function useChainGPT(): UseChainGPTReturn {
   )
   
   const analysisRequestCounter = useRef(0)
-  const statsUpdateInterval = useRef<NodeJS.Timeout>()
+  const statsUpdateInterval = useRef<number>()
 
   // Subscribe to connection events
   useEffect(() => {
@@ -98,7 +98,7 @@ export function useChainGPT(): UseChainGPTReturn {
   // Subscribe to analysis events
   useEffect(() => {
     const unsubscribeAnalysis = chainGPTService.onAnalysisEvent((event: AIAnalysisEvent) => {
-      setActiveAnalyses(prev => {
+      setActiveAnalyses((prev: Map<string, { status: 'analyzing' | 'completed' | 'failed'; progress?: number }>) => {
         const updated = new Map(prev)
         
         switch (event.type) {
@@ -118,7 +118,7 @@ export function useChainGPT(): UseChainGPTReturn {
             updated.set(event.requestId, { status: 'completed', progress: 100 })
             // Remove completed analysis after a delay to keep UI clean
             setTimeout(() => {
-              setActiveAnalyses(map => {
+              setActiveAnalyses((map: Map<string, { status: 'analyzing' | 'completed' | 'failed'; progress?: number }>) => {
                 const newMap = new Map(map)
                 newMap.delete(event.requestId)
                 return newMap
@@ -129,7 +129,7 @@ export function useChainGPT(): UseChainGPTReturn {
             updated.set(event.requestId, { status: 'failed' })
             // Remove failed analysis after a delay
             setTimeout(() => {
-              setActiveAnalyses(map => {
+              setActiveAnalyses((map: Map<string, { status: 'analyzing' | 'completed' | 'failed'; progress?: number }>) => {
                 const newMap = new Map(map)
                 newMap.delete(event.requestId)
                 return newMap
@@ -311,7 +311,7 @@ export function useChainGPT(): UseChainGPTReturn {
 export function useContentModerator() {
   const chainGPT = useChainGPT()
   
-  const moderateMessage = useCallback(async (messageId: string, content: string) => {
+  const moderateMessage = useCallback(async (_messageId: string, content: string) => {
     if (!chainGPT.isConnected) {
       throw new Error('ChainGPT not connected')
     }

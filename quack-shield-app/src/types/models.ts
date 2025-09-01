@@ -1,6 +1,7 @@
 // Shared TypeScript models for QuackNet MVP
 
 import type { AppealStatus } from './blockchain'
+import type { ContentAnalysisResult } from '../../../chaingpt-integration/types/ai'
 
 export type MessageStatus = 'normal' | 'flagged_by_moderator' | 'verified_by_verifier'
 
@@ -13,6 +14,10 @@ export interface Message {
   reason?: string
   removed?: boolean
   appealStatus?: AppealStatus
+  // AI Analysis fields from ChainGPT integration
+  aiConfidence?: number
+  aiRiskLevel?: string
+  aiAnalysis?: ContentAnalysisResult
 }
 
 export interface AgentsConfig {
